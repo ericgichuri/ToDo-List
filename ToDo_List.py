@@ -24,7 +24,7 @@ today1=datetime.date(int(time.strftime("%Y")),int(time.strftime("%m")),int(time.
 
 
 
-btn_width=70
+btn_width=80
 entry_width=150
 
 font_title=("Poppins",15,"bold")
@@ -79,6 +79,23 @@ def func_readfile():
 				for j in range(1,maxcols+1):
 					inner_list.append(activesheet.cell(i,j).value)
 				outter_list.append(inner_list)
+
+		for records in table_mytododata.get_children():
+			table_mytododata.delete(records)
+		for i in outter_list:
+			table_mytododata.insert('',END,value=i)
+def func_showall_todotask():
+	if os.path.exists(file):
+		wb=openpyxl.load_workbook(file)
+		activesheet=wb.active
+		maxrow=activesheet.max_row
+		maxcols=activesheet.max_column
+		outter_list=[]
+		for i in range(2,maxrow+1):
+			inner_list=[]
+			for j in range(1,maxcols+1):
+				inner_list.append(activesheet.cell(i,j).value)
+			outter_list.append(inner_list)
 
 		for records in table_mytododata.get_children():
 			table_mytododata.delete(records)
@@ -178,6 +195,10 @@ table_mytododata.column(0,anchor=CENTER)
 table_mytododata.column(1)
 frame_form1=ctk.CTkFrame(app,fg_color=col_darkblue)
 frame_form1.pack(side=TOP)
+btn_showall=ctk.CTkButton(frame_form1,text="Show All",cursor="hand2",width=btn_width,fg_color=col_button,hover_color=col_button,text_color=col_darkblue,command=func_showall_todotask)
+btn_showall.grid(column=0,row=1,pady=(4,4),padx=8)
+btn_showcurrent=ctk.CTkButton(frame_form1,text="Show Today",cursor="hand2",width=btn_width,fg_color=col_button,hover_color=col_button,text_color=col_darkblue,command=func_readfile)
+btn_showcurrent.grid(column=1,row=1,pady=(4,4),padx=8)
 btn_delete=ctk.CTkButton(frame_form1,text="Delete",cursor="hand2",width=btn_width,fg_color=col_red,hover_color=col_red,command=func_delete_todotask)
 btn_delete.grid(column=2,row=1,pady=(4,4),padx=8)
 
